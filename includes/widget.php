@@ -11,7 +11,7 @@ add_action( 'widgets_init', function(){
     register_widget( 'Bloggerpoints_widget' );
 });
 
-class blogpoint_widget extends WP_Widget {
+class bloggerpoints_widget extends WP_Widget {
 
     /**
      * Register widget with WordPress.
