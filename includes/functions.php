@@ -3,23 +3,50 @@
  * General functions for Bloggerpoints
  */
 
-/* Add database table */
-    function bp_table() {
-        global $wpdb;
+/**
+ * Retrieve total word count for user
+ */
+class word_count {
 
-        $charset_collate = $wpdb->get_charset_collate();
-        $table_name      = $wpdb->prefix . 'bloggerpoints';
+	/**
+	 * Retrieve all meta values
+	 */
+	public function get_meta_values( $key = '', $type = 'post', $status = 'publish', $user_id = '' ) {
 
-        $sql = "CREATE TABLE $table_name (
-          id mediumint(9) NOT NULL AUTO_INCREMENT,
-          time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-          name tinytext NOT NULL,
-          text text NOT NULL,
-          url varchar(55) DEFAULT '' NOT NULL,
-          
-          PRIMARY KEY  (id)
-        ) $charset_collate;";
+		global $wpdb;
 
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-        dbDelta( $sql );
-    }
+		if ( empty( $key ) && empty($user_id) ) {
+			exit;
+		}
+
+		$r = $wpdb->get_col( $wpdb->prepare( "
+	        SELECT pm.meta_value FROM {$wpdb->postmeta} pm
+	        LEFT JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+	        WHERE pm.meta_key = '%s' 
+	        AND p.post_status = '%s' 
+	        AND p.post_type = '%s'
+	        AND p.post_author = '%s'
+	    ", $key, $status, $type, $user_id ) );
+
+		return $r;
+	}
+
+	/**
+	 * Add up total word count for current user
+	 * @return mixed
+	 */
+	public function word_count_total() {
+
+		/* Set ID for current user */
+		$current_user       = wp_get_current_user();
+		$current_user_id    = $current_user->ID;
+
+		/* Retrieve word count of all posts that current user has published */
+		$all_post = $this->get_meta_values('word_count', 'post', 'publish', $current_user_id);
+
+		/* Add all integers to get to a total */
+		$count_all_post = array_sum($all_post);
+
+		return $count_all_post;
+	}
+}
