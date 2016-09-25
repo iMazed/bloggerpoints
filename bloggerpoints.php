@@ -19,6 +19,9 @@ defined( 'ABSPATH' ) or exit;
 include_once('includes/widget.php');
 include_once('includes/functions.php');
 include_once('includes/meta_box.php');
+include_once('includes/class-publish-post.php');
+include_once('includes/shortcodes.php');
+include_once('includes/admin/class-admin-options.php');
 
 /**
  * Translation ready!
@@ -39,18 +42,5 @@ class Bloggerpoints {
      * Initialize the plugin
      */
     public function __construct() {
-        global $wpdb;
-
-        // initialize the custom table names
-        $this->user_bp_log_db_tablename = $wpdb->prefix . 'bloggerpoints_log';
-        $this->user_bp_db_tablename     = $wpdb->prefix . 'bloggerpoints';
-
-        // include required files
-        $this->includes();
-
-        // initialize user point balance on user create/update, and remove the user points record on user delete
-        add_action( 'user_register',  array( $this, 'refresh_user_points_balance' ) );
-        add_action( 'profile_update', array( $this, 'refresh_user_points_balance' ) );
-        add_action( 'delete_user',    array( $this, 'delete_user_points' ) );
     }
 }
