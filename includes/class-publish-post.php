@@ -7,21 +7,19 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class BP_count_words{
+add_action('publish_post', 'add_word_count');
+function add_word_count($post) {
 
-    /**
-     * BP_count_words constructor.
-     * Add hooks/filters
-     */
+	/* Check and set the post ID */
+    global $post;
+    $post_ID    = $post->ID;
 
-    public function __construct() {
-        // add word count to user total when post is published
-        add_action( 'publish_post',  );
-    }
+	/* Retrieve post content */
+    $content = get_post_field( 'post_content', $post_ID );
 
-    public function add_word_count() {
-        global $bp_word_count;
+	/* Strip HTML tags; they shouldn't count towards word total */
+    $word_count = str_word_count( strip_tags( $content ) );
 
-
-    }
+	/* Add word count for this post to the word_count meta field */
+    update_post_meta($post_ID, 'word_count', $word_count);
 }
