@@ -18,7 +18,7 @@ function add_word_count($post) {
     $content = get_post_field( 'post_content', $post_ID );
 
 	/* Strip HTML tags; they shouldn't count towards word total */
-    $word_count = str_word_count( strip_tags( $content ) );
+    $word_count = str_word_count( strip_tags( strip_shortcodes($content) ) );
 
 	/* Add word count for this post to the word_count meta field */
     update_post_meta($post_ID, 'word_count', $word_count);
