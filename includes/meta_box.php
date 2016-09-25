@@ -90,10 +90,7 @@ class someClass {
         /* OK, it's safe for us to save the data now. */
 
         // Sanitize the user input.
-        $mydata = sanitize_text_field( $_POST['myplugin_new_field'] );
-
-        // Update the meta field.
-        update_post_meta( $post_id, '_my_meta_value_key', $mydata );
+        $mydata = sanitize_text_field( $_POST['bloggerpoints_new_field'] );
     }
 
 
@@ -108,13 +105,14 @@ class someClass {
         wp_nonce_field( 'bp_inner_custom_box', 'bp_inner_custom_box_nonce' );
 
         // Use get_post_meta to retrieve an existing value from the database.
-        $value = get_post_meta( $post->ID, '_my_meta_value_key', true );
+        $word_count = get_post_meta( $post->ID, 'word_count', true );
 
         // Display the form, using the current value.
         ?>
         <strong>
-            <?php _e( 'You need %s more words to receive your next badge!', 'bloggerpoints' ); ?>
-        </strong>
+            <?php _e( "You've already written this many words:", 'bloggerpoints' ); ?>
+        </strong><br />
         <?php
+        echo $word_count;
     }
 }
