@@ -7,6 +7,7 @@ Author: Ines van Essen
 Version: 0.0.1
 Author URI: http://inesvanessen.nl
 Text domain: bloggerpoints
+Domain Path: /languages/
 */
 
 
@@ -18,29 +19,15 @@ defined( 'ABSPATH' ) or exit;
  */
 include_once('includes/widget.php');
 include_once('includes/functions.php');
-include_once('includes/meta_box.php');
 include_once('includes/class-publish-post.php');
 include_once('includes/shortcodes.php');
+include_once('includes/badges.php');
 include_once('includes/admin/class-admin-options.php');
 
 /**
  * Translation ready!
  */
-/* TODO add translation */
-
-class Bloggerpoints {
-    /** plugin version number */
-    const VERSION = '0.0.1';
-
-    /** @var string the plugin path */
-    private $plugin_path;
-
-    /** @var string the plugin url */
-    private $plugin_url;
-
-    /**
-     * Initialize the plugin
-     */
-    public function __construct() {
-    }
+add_action( 'plugins_loaded', 'load_bp_textdomain' );
+function load_bp_textdomain() {
+    load_plugin_textdomain( 'bloggerpoints', FALSE, basename( dirname( __FILE__ ) ) . '/languages/' );
 }
